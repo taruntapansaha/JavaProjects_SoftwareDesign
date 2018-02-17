@@ -1,0 +1,67 @@
+Assign3: Due 11:59PM April 7
+
+An agency provides background check service. Given a candidate they can verify
+various things: credit, criminal records, employment verification, citizenship 
+check, etc. There may be more things they can verify in the future.
+
+To make things easy we will use social security number to represent a 
+candidate.
+
+Design a class library with the following:
+
+A candidate can be represented using the social security number, first name, 
+and last name.
+
+Provide facility to evaluate a candidate based on various criteria selected.
+
+The result of evaluation is either an approve or a disapprove. If it was a 
+disapprove, the reason(s) are provided. The result of evaluation should be
+candidate's full name, their social security number, and the result of the 
+evaluation, along with reasons for rejection.
+
+Design the library so that a user of the library can decide which criteria to
+use for evaluation. They can select one or more criteria. They can also 
+provide their own criteria beyond what the library provides.
+
+For each of the criteria (for example to check criminal records) we will 
+pretend that such code can be implemented by talking to a database or a web 
+service. For the purpose of this exercise we will generate a random response 
+in the code for the analysis of a criteria like criminal record.
+
+
+Total [100]: 81
+Code compiles [10]:
+
+Program produces reasonably desired results when run from the build script [10]: -3
+Missing runui task in the build.gradle file. Adding that.
+
+> ./gradlew runui
+:compileJava UP-TO-DATE
+:processResources UP-TO-DATE
+:classes UP-TO-DATE
+:runui
+Please enter the candidate's SSN: 
+> Building 75% > :runui111111111  Please enter the candidate's first name: John
+Please enter the candidate's last name: Doe
+Please enter Criteria separated by space
+app.CreditChecker
+Class(es) not found
+Exception in thread "main" java.lang.NullPointerException
+                 
+The user should be given a list to pick from and not be burdened to type in criteria. I tried different options and it was not clear what to type. Tried only the name, the name with package. Finally looked into the code to find that only the name (in proper case) is needed. Two issues:
+1. Too much burden for the user.
+2. Not all classes may end with Checker or start with app (not user defined ones).
+
+All tests pass [15]:
+Test quality [10]:
+Code Coverage report generated and has necessary coverage [10]:
+Design quality [20]:
+
+Code quality [10]: -1
+
+Please avoid meaningless single letter variable names, like in the following:
+List<String> s = evaluate(candidate, criteria);
+for (String s: rejectionReasons) {
+
+The Design honors OCP and extensibility to add new criteria [15]: -15
+Need to design a way for user to get a list of all available criteria and not burden the user to enter the names.

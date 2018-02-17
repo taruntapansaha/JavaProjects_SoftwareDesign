@@ -1,0 +1,262 @@
+package game;
+
+import com.sun.org.apache.bcel.internal.generic.NEW;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.junit.Assert.*;
+
+public class MineSweeperTest {
+  MineSweeper mineSweeper;
+
+  @Before
+  public void setUp() {
+    mineSweeper = new MineSweeper();
+  }
+
+
+  @Test
+  public void Canary() {
+      assertTrue(true);
+  }
+
+  @Test
+  public void exposeACell() {
+    mineSweeper.exposeCell(5, 5);
+
+    assertEquals(MineSweeper.CellStatus.EXPOSED, mineSweeper.getCellStatus(5, 5));
+  }
+
+  @Test
+  public void exposeAnExposedCell() {
+    mineSweeper.exposeCell(1, 1);
+    mineSweeper.exposeCell(1, 1);
+
+    assertEquals(MineSweeper.CellStatus.EXPOSED, mineSweeper.getCellStatus(1, 1));
+  }              
+  
+  //Venkat: please add a test here to verify that exposeCell calls a verifyBounds.
+  
+  //Change the following four tests to call verifyBounds instead of exposeCell.
+
+  @Test
+  public void exposeCellOutOfLeftBound() {
+    try {
+        mineSweeper.exposeCell(5, -1);
+        fail("Expected exception for clicking out of bounds");
+    } catch (IndexOutOfBoundsException e) {
+    }
+  }
+
+  @Test
+  public void exposeCellOutOfRightBound() {
+    try {
+        mineSweeper.exposeCell(5, 10);
+        fail("Expected exception for clicking out of bounds");
+    } catch (IndexOutOfBoundsException e) {
+    }
+  }
+
+  @Test
+  public void exposeCellOutOfUppertBound() {
+    try {
+        mineSweeper.exposeCell(-1, 5);
+        fail("Expected exception for clicking out of bounds");
+    } catch (IndexOutOfBoundsException e) {
+    }
+  }
+
+  @Test
+  public void exposeCellOutOfLowerBound() {
+    try {
+        mineSweeper.exposeCell(10, 5);
+        fail("Expected exception for clicking out of bounds");
+    } catch (IndexOutOfBoundsException e) {
+    }
+  }
+
+  class MineSweeperExposeNeighborsStubbed extends MineSweeper {
+    public boolean exposeNeighborsCalled = false;
+
+    @Override
+    public void exposeNeighbors(int row, int column) {
+        exposeNeighborsCalled = true;
+    }
+  }
+
+  @Test
+  public void exposeCellCallsExposeNeighbors() {
+    MineSweeperExposeNeighborsStubbed mineSweeper = new MineSweeperExposeNeighborsStubbed();
+    mineSweeper.exposeCell(4, 7);
+
+    assertTrue(mineSweeper.exposeNeighborsCalled);
+  }
+  
+  @Test
+  public void exposeCellDoesNotCallExposeNeighborsForAnAlreadyExpsedCell() {
+    MineSweeperExposeNeighborsStubbed mineSweeper = new MineSweeperExposeNeighborsStubbed();
+    mineSweeper.exposeCell(4, 7);
+    mineSweeper.exposeNeighborsCalled = false;
+    mineSweeper.exposeCell(4, 7);
+
+    assertFalse(mineSweeper.exposeNeighborsCalled);
+  }
+
+  class MineSweeperExposeCellStubbed extends MineSweeper
+  {
+    public List<Integer> listOfRows = new ArrayList<Integer>();  //Venkat: public List<Integer> rows = new ArrayList<>();
+    public List<Integer> listOfColumn = new ArrayList<Integer>();
+
+      @Override
+      public void exposeCell ( int i, int j) {
+        listOfRows.add(i);
+        listOfColumn.add(j);
+      }
+  }
+
+  @Test
+  public void exposeNeighborCallsExposeCell() {
+    MineSweeperExposeCellStubbed mineSweeper = new MineSweeperExposeCellStubbed();
+    mineSweeper.exposeNeighbors(3,4);
+
+    assertEquals(Arrays.asList(2, 2, 2, 3, 3, 3, 4, 4, 4), mineSweeper.listOfRows);
+    assertEquals(Arrays.asList(3, 4, 5, 3, 4, 5, 3, 4, 5), mineSweeper.listOfColumn);
+  }
+
+  @Test
+  public void exposeNeighborsTopLeft() {
+    MineSweeperExposeCellStubbed mineSweeper = new MineSweeperExposeCellStubbed();
+    mineSweeper.exposeNeighbors(0, 0);
+
+    assertEquals(Arrays.asList(0, 0, 1, 1), mineSweeper.listOfRows);
+    assertEquals(Arrays.asList(0, 1, 0, 1), mineSweeper.listOfColumn);
+  }
+
+  @Test
+  public void exposeNeighborsTopRight() {
+    MineSweeperExposeCellStubbed mineSweeper = new MineSweeperExposeCellStubbed();
+    mineSweeper.exposeNeighbors(0,9); //Venkat: space after comma, please
+
+    assertEquals(Arrays.asList(0, 0, 1, 1), mineSweeper.listOfRows);
+    assertEquals(Arrays.asList(8, 9, 8, 9), mineSweeper.listOfColumn);
+  }
+
+  @Test
+  public void exposeNeighborsBottomRight() {
+    MineSweeperExposeCellStubbed mineSweeper = new MineSweeperExposeCellStubbed();
+    mineSweeper.exposeNeighbors(9, 9); //Venkat: space after comma, please
+
+    assertEquals(Arrays.asList(8, 8, 9, 9), mineSweeper.listOfRows);
+    assertEquals(Arrays.asList(8, 9, 8, 9), mineSweeper.listOfColumn);
+  }
+
+  @Test
+  public void exposeNeighborsBottomLeft() {
+    MineSweeperExposeCellStubbed mineSweeper = new MineSweeperExposeCellStubbed();
+    mineSweeper.exposeNeighbors(9,0);
+
+    assertEquals(Arrays.asList(8, 8, 9, 9), mineSweeper.listOfRows);
+    assertEquals(Arrays.asList(0, 1, 0, 1), mineSweeper.listOfColumn);
+  }
+
+  @Test
+  public void sealAnUnexposedCell() {
+    mineSweeper.toggleSeal(3, 5);
+
+    assertEquals(MineSweeper.CellStatus.SEALED, mineSweeper.getCellStatus(3, 5));
+  }
+
+  @Test
+  public void sealAnExposedCell() {
+    mineSweeper.exposeCell(3, 5);
+    mineSweeper.toggleSeal(3, 5);
+
+    assertEquals(MineSweeper.CellStatus.EXPOSED, mineSweeper.getCellStatus(3, 5));
+  }
+
+  @Test
+  public void toggleASealedCell() {
+    mineSweeper.toggleSeal(3, 5);
+    mineSweeper.toggleSeal(3, 5);
+
+    assertEquals(MineSweeper.CellStatus.UNEXPOSED, mineSweeper.getCellStatus(3, 5));
+  }
+  @Test
+  public void tryToExposeASealedCell() {
+    mineSweeper.toggleSeal(3, 5);
+    mineSweeper.exposeCell(3, 5);
+
+    assertEquals(MineSweeper.CellStatus.SEALED, mineSweeper.getCellStatus(3, 5));
+  }
+
+//Venkat: these tests are the same as what we saw before. Please replace these with a test that verifies that toggleSeal calls verifyBounds
+  @Test
+  public void tryToSealAOutofBoundCell() {
+      try {
+        mineSweeper.toggleSeal(-3, 5);
+        fail("Expected exception for clicking out of bounds");
+      } catch (IndexOutOfBoundsException e) {
+      }
+  }
+
+  @Test
+  public void exposeASealedCellDoesNotCallExposeNeighbors() {
+    MineSweeperExposeNeighborsStubbed mineSweeper = new MineSweeperExposeNeighborsStubbed();
+    mineSweeper.toggleSeal(3, 5);
+    mineSweeper.exposeCell(3, 5);
+    assertFalse(mineSweeper.exposeNeighborsCalled);
+  }
+
+  class MineSweeperAdjacentCellStubbed extends MineSweeper {
+
+    @Override
+    public Boolean isAdjacent(int row, int column) {
+      return true;
+    }
+  }
+
+  @Test
+  public void exposeCellDoesNotCallExposeNeighborsOnAdjacentCell() {
+    MineSweeperAdjacentCellStubbed mineSweeper = new MineSweeperAdjacentCellStubbed();
+    mineSweeper.isAdjacent(3, 5);
+    mineSweeper.exposeCell(3, 5);
+
+    assertFalse(mineSweeper.exposeNeighborsCalled);
+  }
+
+  class MineSweeperMinedCellStubbed extends MineSweeper {
+
+    @Override
+    public Boolean isMined(int row, int column){
+      return true;
+    }
+    public void exposeCellDoesNotCallExposeNeighborsOnMinedCell() {
+      MineSweeperMinedCellStubbed mineSweeper = new MineSweeperMinedCellStubbed();
+      mineSweeper.isMined(5, 7);
+
+      assertFalse(mineSweeper.exposeNeighborsCalled);
+    }
+  }
+
+  @Test
+  public void isGameInProgress() {
+    mineSweeper.getGameStatus();
+
+    assertEquals(MineSweeper.GameStatus.INPROGRESS, mineSweeper.getGameStatus());
+
+  }
+
+  @Test
+  public void isGameWonWhenAllTheMinesAreSealed() {
+
+    mineSweeper.setMines();
+
+
+  }
+
+}
+

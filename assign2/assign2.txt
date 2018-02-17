@@ -1,0 +1,40 @@
+Assign2: Due 11:59PM March 10
+
+Write a program, using test first development, for the problem described below. The program will read a file with airport codes. For example, the file may contain:
+IAH
+IAD
+SFO
+STL
+BOS
+MSP
+
+For each given airport code, the program will fetch the airport name, the city name, state name, temperature, and if there is a delay or not, from http://services.faa.gov/airport/status/{CODE}?format=application/json
+[replace {CODE} with an airport code, for example
+http://services.faa.gov/airport/status/IAH?format=application/json
+to get data for the airport code IAH]
+
+The program will print, in sorted order of city name (if two cities have the same name, then the data is further sorted on state name), the following details: city | state | airport code | airport name | temperature | delayed or --- (--- for no delay).
+
+The program will also print, below the table, one line
+Number of airport delays: #
+
+(where # is the actual number of delays).
+
+If for some reason the details for an airport could not be obtained, then the row for that should be shown with --- for all data that could not be obtained for that airport code (but the airport code itself will be displayed on the row).
+
+Total [100]: 90
+Code compiles [10]:
+Program produces reasonably desired results when run from the build script [10]:
+Good tests for handling Network failure and program gracefully handles network failure [10]:
+All tests pass [20]:
+Test quality [10]:
+
+Code Coverage report generated and has necessary coverage [10]: -5
+
+Design quality [20]: -5
+
+AirportStatusReportData unnecessary.
+AirportStatusReporter has some unnecessary methods.
+AirportStatusUI Modularize further, to make methods cohesive.
+
+Code quality [10]:

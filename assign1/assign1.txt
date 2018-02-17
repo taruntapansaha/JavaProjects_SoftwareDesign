@@ -1,0 +1,50 @@
+Assign1: Due 11:59PM February 24
+
+Using Test First Development (no code without test first) implement the
+problem you designed in hw2. Feel free to evolve that design and use your
+judgment to make changes based on the improved understanding and learning.
+
+Take small steps, please ask for frequent reviews.
+
+First start with a tests list and a canary test.
+
+After completing the programming (and only after that) answer the following
+questions:
+
+1. What did you learn mainly in this assignment?
+
+This assignment had us do test driven development (TDD). Junit and Gradle were new to the both of us. We learned to think critically and come up with test cases for all the things that could go wrong in within the specifications of the minesweeper game.
+We initially thought that there would be a handful of test cases or things that could go wrong in a game of minesweeper. We ended up writing 39 test cases. The concept of designing a class by first writing methods to pass our test cases was new to either of us.
+I think we both find that having test cases allows for better understanding when we break our code and how to fix it, especially when working with a partner where either person may not be aware or readily understand some code that the other has written.
+If the test cases are understood and both members are able to make progress and changes in the program to where the test cases still pass, less conflicts arise than if we weren't doing TDD. This is because of the mutual understanding of the logic behind the test cases.
+
+2. How is your current design different, if at all, from the strategic design created in hw2?
+
+When writing the methods to pass our first few test cases we put them all in one MinesweeperGame class. Much of our first few test cases dealt with game logic associated with cells.
+In our initial design we had a separate cell class which was abstract and that there were three other classes to implement the logic for the three types of cells.
+When it came to differentiating the type of cell within our final design, we put all game logic in one class and had enum within the class to label the three types of cells.
+We split the GUI into two classes each contained in their own file. We found it necessary to have a cell class that extends JButton to include a row and column attribute. The rest of the GUI design was kept the same and is contained within the BoardGui class.
+We also decided it was not necessary to include the external library LWJGL and instead we used swing for our GUI.
+
+3. Were there any surprise or things you did not expect along the way? Any particular problem faced, things you had to tackle that you did not expect beforehand?
+
+One of the things we did not expect is the Coverage Report. It took us a while to understand the coverage report and what it was saying but even more challenging was trying to get our code to reach 100 percent. We were only able to get 98 percent coverage. For the rest 2 percent, we exhausted possilbe combinations, sometime not logically correct but still could not figure out a way to reach 100 percent coverage. 
+
+
+Total [100]: 97
+Code compiles [10]:
+Program produces reasonably desired results when run [10]:
+All tests pass [20]:
+
+Code Coverage [10]: -1
+
+Test quality [10]:
+
+Design quality [20]: -1
+Use MouseAdapter instead of MouseListener to avoid empty methods.
+
+Code quality [10]: -1
+Please avoid single letter variable names except for loop index.
+Please indent code properly and give one blank line between methods.
+
+Answers to questions in assign1.txt [10]:
